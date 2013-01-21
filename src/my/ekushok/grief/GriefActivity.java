@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.afree.chart.AFreeChart;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
@@ -25,7 +28,6 @@ public class GriefActivity extends Activity implements View.OnClickListener{
 	private ArrayList<String> data;
 	private MainStore store;
 	private ListView list;
-	private GridView grid;
 	private TextView text;
 	private Button button1;
 	private Button button2;
@@ -46,7 +48,6 @@ public class GriefActivity extends Activity implements View.OnClickListener{
         
         //Viewの指定
         list = (ListView)findViewById(R.id.listView1);
-        grid = (GridView)findViewById(R.id.gridView1);
         text = (TextView)findViewById(R.id.sum);
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
@@ -65,6 +66,7 @@ public class GriefActivity extends Activity implements View.OnClickListener{
         button1.setHeight((int)(disp.getHeight()*0.12));
         button2.setHeight((int)(disp.getHeight()*0.12));
         button3.setHeight((int)(disp.getHeight()*0.12));
+        button3.setHeight((int)(disp.getHeight()*0.12));
         
      // TabHostクラス初期設定        
         TabHost tabs = (TabHost)findViewById(android.R.id.tabhost);
@@ -78,15 +80,9 @@ public class GriefActivity extends Activity implements View.OnClickListener{
         
         // Tab2 設定
         TabSpec tab2 = tabs.newTabSpec("tab2");
-        tab2.setIndicator("一覧A");      // タブに表示する文字列
+        tab2.setIndicator("一覧");      // タブに表示する文字列
         tab2.setContent(R.id.tab2); // タブ選択時に表示するビュー
         tabs.addTab(tab2);              // タブホストにタブ追加
-        
-        //Tab3 設定
-        TabSpec tab3 = tabs.newTabSpec("tab3");
-        tab3.setIndicator("一覧B");      // タブに表示する文字列
-        tab3.setContent(R.id.tab3); // タブ選択時に表示するビュー
-        tabs.addTab(tab3);
         
         //Tab4 設定
         TabSpec tab4 = tabs.newTabSpec("tab4");
@@ -99,7 +95,6 @@ public class GriefActivity extends Activity implements View.OnClickListener{
         
         //リストビューとグリッドビューにデータを格納
 		ViewList();
-		ViewGrid();
 		
 		//テキストの設定
 		text.setText(String.valueOf(sd.sumAll())+"円");
@@ -125,48 +120,50 @@ public class GriefActivity extends Activity implements View.OnClickListener{
     
     //ListViewにアイテムを登録
     private void ViewList(){
-    	
-        //data = store.loadAll("select _id,timestring,price from log2 ");
-        data = store.loadToDay("select _id,timestring,price from log2 ");
+    	SimpleAdapter adapter = new SimpleAdapter(this, getListData(), R.layout.simplelist,
+                new String[] { "no", "name" }, new int[] { R.id.price, R.id.date });
+        list.setAdapter(adapter);
+    }
+    //マップをリストにセット
+    private List<Map<String,String>> getListData(){
+    	List<Map<String, String>> listData = new ArrayList<Map<String, String>>();
+    	data = store.loadToDay("select _id,timestring,price from log2 ");
     	Collections.reverse(data);
-        //ListViewのアイテムとしてrowitem.xmlを定義してある
-        ArrayAdapter<String> arrayAdapter
-        	= new ArrayAdapter<String>(this,R.layout.rowitem,data);
-        list.setAdapter(arrayAdapter);
+    	for(int i = 0; i<data.size();i+=2){
+    		listData.add(getMapData(new String[][] { { "no", data.get(i) }, { "name", data.get(i+1) } }));
+    	}
+    	return listData;
     }
-    //GridViewにアイテムを登録
-    private void ViewGrid(){
-        data = store.loadToDay("select _id,timestring,price from log2 ");
-        Collections.reverse(data);
-        
-        ArrayAdapter<String> arrayAdapter
-        	= new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,data);
-        grid.setAdapter(arrayAdapter);
+    //マップデータを取得
+    private Map<String, String> getMapData(String[][] values) {
+        Map<String, String> map = new HashMap<String, String>();
+        for (int i = 0; i < values.length; i++) {
+            map.put(values[i][0], values[i][1]);
+        }
+
+        return map;
     }
+    
     //ボタンが押された時の処理
 	public void onClick(View v) {
 		if(v == button1){
 			store.add(100);
 			ViewList();
-			ViewGrid();
 			text.setText(String.valueOf(sd.sumAll())+"円");
 		}
 		else if(v == button2){
 			store.add(1000);
 			ViewList();
-			ViewGrid();
 			text.setText(String.valueOf(sd.sumAll())+"円");
 		}
 		else if(v == button3){
 			store.add(3000);
 			ViewList();
-			ViewGrid();
 			text.setText(String.valueOf(sd.sumAll())+"円");
 		}
 		else if(v == deleteButton){
 			store.Undo();
 			ViewList();
-			ViewGrid();
 			text.setText(String.valueOf(sd.sumAll())+"円");
 		}
 		else if(v == thisMonthButton){
