@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">０円</string>
+    <string name="app_name">Grief</string>
+    <string name="Button1">缶ジュース買っちゃった</string>
+    <string name="Button2">ランチ贅沢しちゃった</string>
+    <string name="Button3">飲み会行っちゃった</string><string name="Undo">一つ取り消す</string>
+    <string name="thisMonth">今月</string>
+    <string name="prevMonth">先月</string>
+    <string name="todayExpenses">本日の出費</string>
+    
+    
+
+</resources>
