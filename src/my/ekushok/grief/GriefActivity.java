@@ -41,7 +41,6 @@ public class GriefActivity extends Activity implements View.OnClickListener {
 	private SumData sd;
 	private Calendar cal;
 
-	// private Calendar cal;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,10 +58,12 @@ public class GriefActivity extends Activity implements View.OnClickListener {
 		WindowManager windowmanager = (WindowManager) getSystemService(WINDOW_SERVICE);
 		Display disp = windowmanager.getDefaultDisplay();
 
+		//インスタンス生成
 		cal = new GregorianCalendar();
 		sd = new SumData(this);
 		store = new MainStore(this);
-
+		
+		//ボタン等の大きさを指定
 		text.setHeight((int) (disp.getHeight() * 0.3));
 		button1.setHeight((int) (disp.getHeight() * 0.12));
 		button2.setHeight((int) (disp.getHeight() * 0.12));
@@ -90,6 +91,12 @@ public class GriefActivity extends Activity implements View.OnClickListener {
 		tab4.setIndicator("グラフ"); // タブに表示する文字列
 		tab4.setContent(R.id.tab4); // タブ選択時に表示するビュー
 		tabs.addTab(tab4);
+		
+		// Tab2 設定
+		TabSpec tab3 = tabs.newTabSpec("tab3");
+		tab3.setIndicator("編集"); // タブに表示する文字列
+		tab3.setContent(R.id.tab3); // タブ選択時に表示するビュー
+		tabs.addTab(tab2); // タブホストにタブ追加
 
 		// 初期表示設定
 		tabs.setCurrentTab(0);
@@ -151,27 +158,35 @@ public class GriefActivity extends Activity implements View.OnClickListener {
 	// ボタンが押された時の処理
 	public void onClick(View v) {
 		if (v == button1) {
-			store.add(100);
+			//buttonテーブルからそのボタンの価格を取得後、log2テーブルに挿入
+			chartview.invalidate();
+			store.add(store.getButtonPrice(1),1);
 			ViewList();
 			text.setText(String.valueOf(sd.sumAll()) + "円");
 		} else if (v == button2) {
-			store.add(1000);
+			chartview.invalidate();
+			store.add(store.getButtonPrice(2),2);
 			ViewList();
 			text.setText(String.valueOf(sd.sumAll()) + "円");
 		} else if (v == button3) {
-			store.add(3000);
+			chartview.invalidate();
+			store.add(store.getButtonPrice(3),3);
 			ViewList();
 			text.setText(String.valueOf(sd.sumAll()) + "円");
 		} else if (v == deleteButton) {
+			//ひとつ取り消す
+			chartview.invalidate();
 			store.Undo();
 			ViewList();
 			text.setText(String.valueOf(sd.sumAll()) + "円");
 		} else if (v == thisMonthButton) {
+			//今月のグラフ取得
 			chartview.invalidate();
 			chart = creater.getBarThisMonth(cal.get(Calendar.MONTH),
 					cal.get(Calendar.YEAR));
 			chartview.setChart(chart);
 		} else if (v == prevMonthButton) {
+			//先月のグラフ取得。先月が12月の場合とそれ以外の場合で西暦が変わるので場合分け。
 			chartview.invalidate();
 			if (new GregorianCalendar().get(Calendar.MONTH) == 0) {
 				chart = creater

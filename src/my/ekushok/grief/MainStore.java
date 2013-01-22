@@ -31,25 +31,22 @@ public class MainStore {
 	public void close() {
 		m_db.close();
 	}
-
+	/*
+	 * log2テーブルの操作
+	 */
 	//レコードの追加
 	public void add( int price ) {
 		String sql = "insert into log2 (timestring,price) values (date('now','localtime'),"+price+")";
 		m_db.execSQL(sql);
 	}
-	
-	//レコードの更新
-	public void update( int id,int price ) {
-		ContentValues val = new ContentValues();
-		java.text.SimpleDateFormat formatter 
-			= new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		val.put("timestring",formatter.format(new Date()));
-		val.put("price", price);
-		m_db.update( TBL_NAME, val, "_id=?", new String[] { Integer.toString( id ) });		
+	public void add( int price ,int btnId) {
+		String sql = "insert into log2 (timestring,price,type) values (date('now','localtime'),"+price+","+btnId+")";
+		m_db.execSQL(sql);
 	}
 	
 	//レコードの読み込み
 	//columnIndexが1の場合はtimestamp,２の場合はpriceを取得
+	//全件取得
 	public ArrayList<String> loadAll(String queryString)
 	{
 		int i;
@@ -111,6 +108,7 @@ public class MainStore {
 	public void deleteAll(){
 		//m_db.delete(TBL_NAME, null, null);
 	}
+	//直前の一件削除
 	public void Undo(){
 		Cursor c;
 		c = m_db.rawQuery("select _id from log2;", null);
@@ -119,5 +117,31 @@ public class MainStore {
 		String last = c.getString(0);
 		c.close();
 		m_db.execSQL("delete from log2 where _id='"+last+"'");
+	}
+	
+	/*
+	 * ここからbuttonテーブルの操作
+	 */
+	//どのボタンが押されたかを引数として、そのボタンの価格を返す
+	public Integer getButtonPrice(int btnId){
+		Cursor c;
+		if( m_db == null )
+        	return null;
+
+		c = m_db.rawQuery("select price from button where type = '"+btnId+"'", null);
+        c.moveToFirst();
+        int rtnval = c.getInt(0);
+		c.close();
+        return rtnval;
+	}
+
+	//レコードの更新
+	public void update( int id,int price ) {
+		ContentValues val = new ContentValues();
+		java.text.SimpleDateFormat formatter 
+			= new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		val.put("timestring",formatter.format(new Date()));
+		val.put("price", price);
+		m_db.update( TBL_NAME, val, "_id=?", new String[] { Integer.toString( id ) });		
 	}
 }

@@ -55,15 +55,21 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 	//データベースが生成されたら呼び出される。テーブルを作ってる。
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(
-				"CREATE TABLE IF NOT EXISTS log2 ( _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , timestring TEXT NOT NULL , price INTEGER )"
+				"CREATE TABLE IF NOT EXISTS log2 ( _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , timestring TEXT NOT NULL , price INTEGER ,type INTEGER)"
 				);
+		db.execSQL(
+				"CREATE TABLE IF NOT EXISTS button ( _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , type INTEGER,name TEXT,price INTEGER)"
+				);
+		//buttonテーブルの初期値設定
+		db.execSQL("insert into button (type,name,price) values (1,'缶ジュース買っちゃった',100)");
+		db.execSQL("insert into button (type,name,price) values (2,'ランチ贅沢しちゃった',1000)");
+		db.execSQL("insert into button (type,name,price) values (3,'飲み会行っちゃった',3000)");
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO 自動生成されたメソッド・スタブ
 		db.execSQL(
-				"CREATE TABLE IF NOT EXISTS log2 ( _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , timestring TEXT NOT NULL , price INTEGER )"
+				"CREATE TABLE IF NOT EXISTS log2 ( _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , timestring TEXT NOT NULL , price INTEGER ,type INT)"
 				);
 	}
 
