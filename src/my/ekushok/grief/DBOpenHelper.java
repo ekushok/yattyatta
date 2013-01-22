@@ -55,7 +55,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 	//データベースが生成されたら呼び出される。テーブルを作ってる。
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(
-				"CREATE TABLE IF NOT EXISTS log ( _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , timestamp INTEGER NOT NULL , price INTEGER )"
+				"CREATE TABLE IF NOT EXISTS log2 ( _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , timestring TEXT NOT NULL , price INTEGER )"
 				);
 	}
 
