@@ -46,7 +46,7 @@ public class GriefActivity extends Activity implements View.OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
+		//margeTest
 		// View‚ÌŽw’è
 		list = (ListView) findViewById(R.id.listView1);
 		text = (TextView) findViewById(R.id.sum);
