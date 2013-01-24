@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <resources>
+        <!-- リストの表示項目 -->
+        <string-array name="title_list">
+            <item>缶ジュース</item>
+            <item>贅沢ランチ</item>
+            <item>飲み会</item>
+            <item>タバコ</item>
+        </string-array>
+ 
+        <!-- 実際にプリファレンスに保存する値 -->
+        <string-array name="title_list_values">
+            <item>0</item>
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+        </string-array>
+    </resources>

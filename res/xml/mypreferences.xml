@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <ListPreference 	android:title="ボタン1の設定(タイトル)"
+        			 	android:key="button1"
+        			 	android:entries="@array/title_list"
+                		android:entryValues="@array/title_list_values"
+                		/>
+    <EditTextPreference android:title="ボタン1の編集(価格)"
+        				 android:key="p_button1" 
+        				 android:summary="ボタン1の価格編集ができます"
+        				 android:numeric="integer"/>
+    
+    <ListPreference 	android:title="ボタン2の設定(タイトル)"
+        			 	android:key="button2"
+        			 	android:entries="@array/title_list"
+                		android:entryValues="@array/title_list_values"
+                		/>
+    <EditTextPreference android:title="ボタン2の編集(価格)"
+        				 android:key="p_button2" 
+        				 android:summary="ボタン2の価格編集ができます"
+        				 android:numeric="integer"/>
+    
+    <ListPreference 	android:title="ボタン3の設定(タイトル)"
+        			 	android:key="button3"
+        			 	android:entries="@array/title_list"
+                		android:entryValues="@array/title_list_values"
+                		/>
+    <EditTextPreference android:title="ボタン3の編集(価格)"
+        				android:key="p_button3" 
+        				android:summary="ボタン3の価格編集ができます"
+        				android:numeric="integer"/>
+    
+
+</PreferenceScreen>
